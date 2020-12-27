@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+    web:
+        build:
+            context: ./nginx/
+            dockerfile: Dockerfile
+        volumes:
+          - ./html:/usr/share/nginx/html
+        ports:
+          - 9080:80
+        links:
+          - php
+    php:
+        build:
+            context: ./php
+            dockerfile: Dockerfile
+        volumes:
+          -  ./html:/usr/share/nginx/html
+          -  ./php/php.ini:/usr/local/etc/php/conf.d/php.ini
+    mysql:
+        build:
+            context: ./mysql
+            dockerfile: Dockerfile
+        environment:
+          -  MYSQL_ROOT_PASSWORD=root
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+        volumes:
+          -  ./mysql/mysql_data:/var/lib/mysql
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+          -  PMA_ARBITRARY=1
+          -  PMA_HOST=mysql
+          -  PMA_USER=root
+          -  PMA_PASSWORD=root
+        links:
+          -  mysql
+        ports:
+          -  4040:80
+        volumes:
+          -  ./phpmyadmin/sessions:/sessions
