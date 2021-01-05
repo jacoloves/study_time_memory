@@ -25,34 +25,7 @@
         // $stmt->execute($data);
         $stmt->execute();
 
-        $rec = $stmt->fetch(PDO::FETCH_ASSOC);
-        // $rec = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        var_dump($rec);
-
-        // foreach ($rec as $value) {
-        //     print($value["record"]);
-        // }
-
-
-        print "<table border=1>";
-        print "<th>科目名</th>";
-        print "<th>勉強時間</th>";
-        // foreach ($rec as $value) {
-        //     print "<tr>";
-        //     print $rec['subject'];
-        //     print "</tr>";
-        //     print "<tr>";
-        //     print $rec['record'];
-        //     print "</tr>";
-        // }
-
-        // print "<tr>" + $rec['subject'] + "</tr>";
-        // print "<tr>" + $rec['record'] + "</tr>";
-        print "</table>";
-
         $dbh = null;
-
     } catch (Exception $e) {
         print $e;
         print '<br>';
@@ -60,6 +33,29 @@
         exit();
     }
 ?>
+
+
+    <table border=1>
+        <tr>
+            <th>科目名</th>
+            <th>勉強時間</th>
+        </tr>
+<?php 
+    while(true) {
+        $rec = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($rec == false) {
+            break;
+        }
+?>
+    <tr>
+        <td><?php print $rec['subject']; ?></td>
+        <td><?php print $rec['record']; ?></td>
+    </tr>
+<?php
+    }
+?>
+
+    </table>
 
     <a href="index.php">戻る</a>
 </body>
